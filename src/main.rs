@@ -1,3 +1,4 @@
+use fasteval::Error;
 use imgui::*;
 
 mod support;
@@ -36,6 +37,14 @@ fn main() {
                         if row != 0 && column != 0 {
                             let id = ui.push_id(&format!("r{}c{}", row, column));
                             ui.input_text("", &mut state[column][row]).build();
+                            if state[column][row].starts_with("=") {
+                                let mut ns = fasteval::EmptyNamespace;
+                                let val = fasteval::ez_eval(&state[column][row][1..], &mut ns);
+                                state[column][row] = match val {
+                                    Ok(f) => f.to_string(),
+                                    Err(_) => String::new(),
+                                }
+                            }
                             id.pop();
                         }
                     }
