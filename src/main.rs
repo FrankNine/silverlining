@@ -25,5 +25,20 @@ fn main() {
                     mouse_pos[0], mouse_pos[1]
                 ));
             });
+        Window::new("Table")
+            .size([300.0, 110.0], Condition::FirstUseEver)
+            .build(ui, || {
+                let t = ui.begin_table("Table", 3);
+                for row in 0..4
+                {
+                    ui.table_next_row();
+                    for column in 0..3
+                    {
+                        ui.table_set_column_index(column);
+                        ui.text(format!("Row {} Column {}", row, column));
+                    }
+                }
+                t.unwrap().end();
+            });
     });
 }
